@@ -77,6 +77,21 @@ Bem-vindo à documentação do **Sistema de Reserva de Hotel**. Este arquivo ser
 
 ---
 
+### 6. **[Histórias de Usuário](HISTORIAS_USUARIO.md)**
+   
+   Documento com 18 histórias de usuário completas em formato padrão:
+   - **Formato Padrão**: Como [tipo de usuário], eu quero…, para que…
+   - **Critérios de Aceitação**: Formato Gherkin (Given-When-Then)
+   - **Story Points**: Estimativa de esforço para cada história
+   - **Prioridade**: Classificação por importância
+   - **Total**: 18 histórias (10 críticas + 6 altas + 2 baixas)
+   - **Cobertura**: Todos os 3 módulos + dashboard
+   - **Mapeamento**: Ligação com requisitos funcionais
+
+   **Quando usar**: Para planejamento de sprints, desenvolvimento e testes de aceitação.
+
+---
+
 ## 🎨 Paleta de Cores Rápida
 
 | Uso | Cor | Hex |
@@ -135,7 +150,27 @@ Armazena as reservas realizadas
 
 ---
 
-## 🎯 Principais Regras de Negócio
+## � Histórias de Usuário - Resumo Rápido
+
+### Total: 18 Histórias | 89 Story Points
+
+| Módulo | Histórias | Prioridade | Stories |
+|--------|-----------|-----------|----------|
+| **Gestão de Quartos** | 7 | 4 Críticas, 2 Altas, 1 Baixa | US-001 a US-007 |
+| **Gestão de Hóspedes** | 4 | 1 Crítica, 3 Altas | US-008 a US-011 |
+| **Gestão de Reservas** | 5 | 5 Críticas | US-012 a US-016 |
+| **Dashboard/Relatórios** | 2 | 2 Baixas | US-017 a US-018 |
+
+### Cada História Inclui:
+✅ Formato padrão: "Como [ator], eu quero..., para que..."  
+✅ Mínimo 3 Critérios de Aceitação em formato Gherkin (Given-When-Then)  
+✅ Estimativa de Story Points  
+✅ Classificação por Prioridade  
+✅ Status e rastreamento  
+
+**Desenvolvido em 5 sprints de 2 semanas (velocidade 10 pt/sprint)**
+
+---
 
 | Categoria | Regra |
 |-----------|-------|
@@ -172,6 +207,7 @@ Armazena as reservas realizadas
 - [x] Modelos de Dados
 - [x] Casos de Uso e Regras de Negócio
 - [x] Requisitos RF/RNF com Priorização MoSCoW
+- [x] Histórias de Usuário com Critérios de Aceitação
 - [ ] Documentação de API (futuro)
 - [ ] Guia de Desenvolvimento (futuro)
 - [ ] Testes Unitários (futuro)
@@ -258,5 +294,5 @@ Para dúvidas sobre a documentação:
 ---
 
 **Gerado em**: 16 de fevereiro de 2026  
-**Status**: Documentação Completa com Priorização MoSCoW - Pronta para Desenvolvimento
-**Revisão**: v1.1 com adição de Requisitos RF/RNF
+**Status**: ✅ Documentação Completa com Histórias de Usuário - Pronta para Sprint Planning  
+**Versão**: 1.2 - Adição de Histórias de Usuário em formato padrão
