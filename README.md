@@ -1,9 +1,9 @@
 # Sistema de Reserva de Hotel 🏨
 
-**Status**: ✅ Documentação Completa com Arquitetura Proposta - Pronta para Desenvolvimento
+**Status**: ✅ Documentação Completa com ADRs - Pronta para Sprint Planning
 
 **Data**: 16 de fevereiro de 2026  
-**Versão**: 1.5  
+**Versão**: 1.6  
 
 ---
 
@@ -17,7 +17,7 @@ Sistema web para gerenciamento de reservas de um único hotel, desenvolvido com 
 
 ## 📁 Documentação Disponível
 
-Esta documentação está organizada em 9 documentos na pasta `/docs/REQUISITOS/`:
+Esta documentação está organizada em 10 documentos na pasta `/docs/REQUISITOS/`:
 
 ### 1. ✅ [REQUISITOS_SISTEMA_HOTELEIRO.md](docs/REQUISITOS/REQUISITOS_SISTEMA_HOTELEIRO.md)
 Especificação inicial do sistema com requisitos funcionais básicos, módulos principais e regras de negócio introdutórias.
@@ -197,6 +197,40 @@ Análise de alternativas arquiteturais e recomendação de arquitetura com justi
 - **Resiliência**: Load balancing, health checks, auto scaling, circuit breaker, disaster recovery
 
 - **Observabilidade**: Logs estruturados, métricas, tracing distribuído, dashboards críticos
+
+---
+
+### 10. ✅ [DECISOES_ARQUITETURAIS.md](docs/REQUISITOS/DECISOES_ARQUITETURAIS.md) **NOVO**
+Documentação formal de decisões arquiteturais críticas usando o padrão ADR (Architecture Decision Records).
+
+**Conteúdo**:
+- **Formato ADR padrão** com contexto, decisão, justificativa, consequências
+- **10 Decisões Documentadas**:
+  1. ADR-001: Monolito Modular vs Microserviços
+  2. ADR-002: PostgreSQL como BD principal
+  3. ADR-003: Node.js + Express + TypeScript
+  4. ADR-004: React/Vue como framework frontend
+  5. ADR-005: Arquitetura em 4 camadas
+  6. ADR-006: Autenticação com JWT
+  7. ADR-007: Transações ACID para reservas
+  8. ADR-008: Escalabilidade horizontal (Load Balancer)
+  9. ADR-009: Preparação para evolução a Microserviços
+  10. ADR-010: Cache Redis (v1.1)
+
+- **Cada ADR inclui**:
+  - Status (ACCEPTED, PROPOSED, DEPRECATED, SUPERSEDED)
+  - Contexto e problema
+  - Alternativas consideradas
+  - Justificativa com tabelas comparativas
+  - Consequências (vantagens, desvantagens, pontos de atenção)
+  - Impacto (desempenho, escalabilidade, complexidade, custo)
+  - Próximos passos
+
+- **Tabela Resumida**: Visão rápida de todas as decisões
+- **Processo de Revogação**: Como mudar um ADR se necessário
+- **Referências**: Links para C4 Model, 12 Factor App, etc.
+
+**Propósito**: Preservar a história da arquitetura e facilitar decisões futuras.
 
 ---
 
@@ -412,6 +446,7 @@ Consulte [CASOS_USO_PRINCIPAIS.md](docs/REQUISITOS/CASOS_USO_PRINCIPAIS.md)
 | 1.3 | 2026-02-16 | Casos de uso formais (9 CU com fluxos) |
 | 1.4 | 2026-02-16 | Matriz de rastreabilidade requisitos↔US↔CU |
 | 1.5 | 2026-02-16 | Arquitetura proposta com roadmap evolutivo |
+| 1.6 | 2026-02-16 | Decisões arquiteturais críticas (ADR - 10 decisões) |
 
 ---
 
@@ -422,5 +457,5 @@ Propriedade do projeto. Não distribuir sem permissão.
 ---
 
 **Última atualização**: 16 de fevereiro de 2026  
-**Status**: ✅ Documentação Completa - Pronta para Sprint Planning  
+**Status**: ✅ Documentação Completa com ADRs - Pronta para Sprint Planning  
 **Próximo passo**: Iniciar desenvolvimento com base em Sprint 1
