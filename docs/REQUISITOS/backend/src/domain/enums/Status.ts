@@ -7,7 +7,8 @@ export enum TipoQuarto {
 export enum StatusDisponibilidade {
   LIVRE = 'Livre',
   OCUPADO = 'Ocupado',
-  MANUTENCAO = 'Manutenção e Limpeza'
+  MANUTENCAO = 'Manutenção',
+  LIMPEZA = 'Limpeza'
 }
 
 export enum TipoCama {
