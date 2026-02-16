@@ -1,21 +1,22 @@
 import { Quarto } from '../../domain/entities/Quarto';
 import { Cama } from '../../domain/entities/Cama';
 import { IQuartoRepository } from '../../domain/repositories/IQuartoRepository';
-import { CreateQuartoDTO, UpdateQuartoDTO } from '../../domain/dtos/QuartoDTO';
+import { CreateQuartoRequest, UpdateQuartoRequest, QuartoResponseDTO } from '../../domain/dtos/QuartoDTO';
 
+/**
+ * QuartoService: Orquestrador da aplicação.
+ * SOLID (DIP): Depende da interface IQuartoRepository.
+ */
 export class QuartoService {
-  constructor(private quartoRepository: IQuartoRepository) {}
+  constructor(private readonly repository: IQuartoRepository) {}
 
-  async cadastrar(dados: CreateQuartoDTO): Promise<Quarto> {
-    // RN001: Validar número único
-    const existe = await this.quartoRepository.findByNumero(dados.numero);
-    if (existe) throw new Error("Já existe um quarto com este número.");
-
-    // RN003: Validar preço positivo
-    if (dados.precoPorHora <= 0) throw new Error("O preço deve ser maior que zero.");
+  public async cadastrar(dados: CreateQuartoRequest): Promise<void> {
+    // Validação de unicidade (Regra de Domínio)
+    const existente = await this.repository.findByNumero(dados.numero);
+    if (existente) throw new Error("Quarto com este número já cadastrado.");
 
     const novoQuarto = new Quarto(
-      Math.random().toString(), // ID temporário
+      crypto.randomUUID(), // Utilizando Web Crypto API para IDs únicos
       dados.numero,
       dados.capacidade,
       dados.tipo,
@@ -23,34 +24,44 @@ export class QuartoService {
       dados.amenidades
     );
 
-    // Suporte a múltiplas camas
-    dados.camas.forEach(c => {
-      novoQuarto.adicionarCama(new Cama(Math.random().toString(), c.tipo));
+    // Mapeamento de camas recebidas no DTO para a Entidade
+    dados.camas.forEach(tipo => {
+      novoQuarto.adicionarCama(new Cama(crypto.randomUUID(), tipo));
     });
 
-    return await this.quartoRepository.save(novoQuarto);
+    await this.repository.save(novoQuarto);
   }
 
-  async editar(id: string, dados: UpdateQuartoDTO): Promise<Quarto> {
-    const quarto = await this.quartoRepository.findById(id);
+  public async editar(id: string, dados: UpdateQuartoRequest): Promise<void> {
+    const quarto = await this.repository.findById(id);
     if (!quarto) throw new Error("Quarto não encontrado.");
 
-    if (dados.numero) {
-        const existe = await this.quartoRepository.findByNumero(dados.numero);
-        if (existe && existe.id !== id) throw new Error("Número de quarto já em uso.");
-        // @ts-ignore - simplificação para o exemplo
-        quarto.numero = dados.numero;
-    }
-
-    if (dados.precoPorHora) quarto.precoDiaria = dados.precoPorHora;
+    // Aplicando alterações via métodos da entidade (Preservando Invariantes)
+    if (dados.precoPorHora) quarto.atualizarPreco(dados.precoPorHora);
     if (dados.status) quarto.alterarStatus(dados.status);
     
-    // Lógica para atualizar camas poderia ser adicionada aqui...
+    quarto.atualizarDados({
+      numero: dados.numero,
+      capacidade: dados.capacidade,
+      tipo: dados.tipo
+    });
 
-    return await this.quartoRepository.update(id, quarto);
+    await this.repository.save(quarto); // O repositório lida com o "Upsert"
   }
 
-  async listarTodos(): Promise<Quarto[]> {
-    return await this.quartoRepository.findAll();
+  /**
+   * Retorna DTOs de resposta em vez da Entidade pura.
+   * Isso desacopla o contrato da API da estrutura interna do banco.
+   */
+  public async listarQuartos(): Promise<QuartoResponseDTO[]> {
+    const quartos = await this.repository.findAll();
+    return quartos.map(q => ({
+      id: q.id,
+      numero: q.numero,
+      tipo: q.tipo,
+      precoPorHora: q.precoPorHora,
+      status: q.status,
+      camasCount: q.camas.length
+    }));
   }
 }

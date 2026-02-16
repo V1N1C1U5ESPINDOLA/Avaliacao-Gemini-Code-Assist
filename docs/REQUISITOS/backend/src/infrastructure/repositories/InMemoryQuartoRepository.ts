@@ -1,29 +1,31 @@
 import { Quarto } from '../../domain/entities/Quarto';
 import { IQuartoRepository } from '../../domain/repositories/IQuartoRepository';
 
+/**
+ * Implementação em Memória: Útil para testes e prototipagem rápida.
+ * SOLID (LSP): Esta classe pode substituir qualquer outra implementação de IQuartoRepository sem quebrar o Service.
+ */
 export class InMemoryQuartoRepository implements IQuartoRepository {
-  private quartos: Quarto[] = [];
+  private items: Quarto[] = [];
 
-  async save(quarto: Quarto): Promise<Quarto> {
-    this.quartos.push(quarto);
-    return quarto;
+  async save(quarto: Quarto): Promise<void> {
+    const index = this.items.findIndex(i => i.id === quarto.id);
+    if (index >= 0) {
+      this.items[index] = quarto;
+    } else {
+      this.items.push(quarto);
+    }
   }
 
   async findById(id: string): Promise<Quarto | null> {
-    return this.quartos.find(q => q.id === id) || null;
+    return this.items.find(i => i.id === id) || null;
   }
 
   async findByNumero(numero: number): Promise<Quarto | null> {
-    return this.quartos.find(q => q.numero === numero) || null;
+    return this.items.find(i => i.numero === numero) || null;
   }
 
   async findAll(): Promise<Quarto[]> {
-    return this.quartos;
-  }
-
-  async update(id: string, quarto: Quarto): Promise<Quarto> {
-    const index = this.quartos.findIndex(q => q.id === id);
-    this.quartos[index] = quarto;
-    return quarto;
+    return [...this.items];
   }
 }

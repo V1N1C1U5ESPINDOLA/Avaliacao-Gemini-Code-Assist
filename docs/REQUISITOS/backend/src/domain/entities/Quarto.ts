@@ -1,17 +1,21 @@
-import { TipoQuarto, StatusDisponibilidade, TipoCama } from '../enums/Status';
-import { Cama } from './Cama'; // Importação da entidade vizinha
+import { TipoQuarto, StatusDisponibilidade } from '../enums/Status';
+import { Cama } from './Cama';
 
+/**
+ * Entidade Quarto: Raiz do Agregado.
+ * Clean Code: Centraliza validações de estado para garantir que o objeto seja sempre válido.
+ */
 export class Quarto {
   private _status: StatusDisponibilidade;
-  public camas: Cama[] = [];
+  private _camas: Cama[] = [];
 
   constructor(
     public readonly id: string,
-    public readonly numero: number,
-    public capacidade: number,
-    public tipo: TipoQuarto,
-    public precoDiaria: number,
-    public amenidades: {
+    private _numero: number,
+    private _capacidade: number,
+    private _tipo: TipoQuarto,
+    private _precoPorHora: number,
+    public readonly amenidades: {
       frigobar: boolean;
       cafeManha: boolean;
       arCondicionado: boolean;
@@ -22,34 +26,42 @@ export class Quarto {
     this._status = statusInicial;
   }
 
-  // State Pattern: Controle de transição de status
-  get status(): StatusDisponibilidade {
-    return this._status;
-  }
+  // Getters para proteger o acesso às propriedades privadas
+  get numero() { return this._numero; }
+  get capacidade() { return this._capacidade; }
+  get tipo() { return this._tipo; }
+  get precoPorHora() { return this._precoPorHora; }
+  get status() { return this._status; }
+  get camas() { return [...this._camas]; } // Retorna cópia para evitar mutação externa (Clean Code)
 
+  /**
+   * Encapsula a lógica de transição de status (State Pattern logic).
+   * Garante que regras de negócio de disponibilidade sejam respeitadas.
+   */
   public alterarStatus(novoStatus: StatusDisponibilidade): void {
-    // RN008: Regra de transição de estado
     if (this._status === StatusDisponibilidade.OCUPADO && novoStatus === StatusDisponibilidade.LIVRE) {
-      throw new Error("Quarto ocupado deve passar por limpeza antes de ficar livre.");
+      throw new Error("Um quarto ocupado deve passar por Limpeza antes de ser liberado.");
     }
     this._status = novoStatus;
   }
 
-  public adicionarCama(cama: Cama): void {
-    this.camas.push(cama);
+  public atualizarPreco(novoPreco: number): void {
+    if (novoPreco <= 0) throw new Error("Preço deve ser maior que zero.");
+    this._precoPorHora = novoPreco;
   }
 
-  // Factory Method: Criação padronizada de um quarto básico
-  public static createBasic(id: string, numero: number): Quarto {
-    const quarto = new Quarto(id, numero, 2, TipoQuarto.BASICO, 150, {
-      frigobar: false,
-      cafeManha: false,
-      arCondicionado: true,
-      tv: true
-    });
-    // Adicionando camas usando a classe Cama
-    quarto.adicionarCama(new Cama(Math.random().toString(), TipoCama.SOLTEIRO));
-    quarto.adicionarCama(new Cama(Math.random().toString(), TipoCama.SOLTEIRO));
-    return quarto;
+  public adicionarCama(cama: Cama): void {
+    // Regra: Não permitir mais camas que a capacidade suporta
+    if (this._camas.length >= this._capacidade) {
+      throw new Error("Capacidade máxima de camas atingida para este quarto.");
+    }
+    this._camas.push(cama);
+  }
+
+  // Método para atualizar dados básicos em lote (Edição)
+  public atualizarDados(dados: { numero?: number; capacidade?: number; tipo?: TipoQuarto }): void {
+    if (dados.numero) this._numero = dados.numero;
+    if (dados.capacidade) this._capacidade = dados.capacidade;
+    if (dados.tipo) this._tipo = dados.tipo;
   }
 }

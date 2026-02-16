@@ -1,6 +1,9 @@
 import { TipoQuarto, TipoCama, StatusDisponibilidade } from '../enums/Status';
 
-export interface CreateQuartoDTO {
+/**
+ * DTOs: Garantem que a camada externa não conheça a estrutura interna da Entidade.
+ */
+export interface CreateQuartoRequest {
   numero: number;
   capacidade: number;
   tipo: TipoQuarto;
@@ -11,9 +14,19 @@ export interface CreateQuartoDTO {
     arCondicionado: boolean;
     tv: boolean;
   };
-  camas: { tipo: TipoCama }[]; // Suporte a múltiplas camas
+  camas: TipoCama[];
 }
 
-export interface UpdateQuartoDTO extends Partial<CreateQuartoDTO> {
+export interface UpdateQuartoRequest extends Partial<CreateQuartoRequest> {
   status?: StatusDisponibilidade;
+}
+
+// Resposta formatada para a listagem (Clean Code: Mostra apenas o necessário)
+export interface QuartoResponseDTO {
+  id: string;
+  numero: number;
+  tipo: TipoQuarto;
+  precoPorHora: number;
+  status: StatusDisponibilidade;
+  camasCount: number;
 }
