@@ -1,9 +1,9 @@
 # Sistema de Reserva de Hotel 🏨
 
-**Status**: ✅ Documentação Completa com ADRs - Pronta para Sprint Planning
+**Status**: ✅ Documentação Completa com Diagramas UML - Pronta para Sprint Planning
 
 **Data**: 16 de fevereiro de 2026  
-**Versão**: 1.6  
+**Versão**: 1.7  
 
 ---
 
@@ -17,7 +17,7 @@ Sistema web para gerenciamento de reservas de um único hotel, desenvolvido com 
 
 ## 📁 Documentação Disponível
 
-Esta documentação está organizada em 10 documentos na pasta `/docs/REQUISITOS/`:
+Esta documentação está organizada em 11 documentos na pasta `/docs/REQUISITOS/`:
 
 ### 1. ✅ [REQUISITOS_SISTEMA_HOTELEIRO.md](docs/REQUISITOS/REQUISITOS_SISTEMA_HOTELEIRO.md)
 Especificação inicial do sistema com requisitos funcionais básicos, módulos principais e regras de negócio introdutórias.
@@ -234,6 +234,70 @@ Documentação formal de decisões arquiteturais críticas usando o padrão ADR 
 
 ---
 
+### 11. ✅ [DIAGRAMAS_COMPONENTES_CLASSES.md](docs/REQUISITOS/DIAGRAMAS_COMPONENTES_CLASSES.md) **NOVO**
+Diagramas técnicos de componentes, classes e relacionamentos com notação UML e Mermaid.
+
+**Conteúdo**:
+- **Diagrama de Componentes** (5 camadas):
+  1. Frontend Web (React/Vue)
+  2. Camada API (Express.js)
+  3. Camada Lógica de Negócio (Services)
+  4. Camada Acesso a Dados (Repositories)
+  5. Infraestrutura (PostgreSQL, Redis, Logging)
+
+- **Diagrama de Classes Completo** (UML Mermaid):
+  - **Hospede**: id, nome, sobrenome, cpf (UNIQUE), email, métodos CRUD
+  - **Quarto**: id, numero, capacidade, tipo, preco_diaria, disponibilidade, amenidades, métodos negócio
+  - **Cama**: id, quarto_id (FK), tipo (SOLTEIRO, QUEEN, KING)
+  - **Reserva**: id, quarto_id (FK), hospede_id (FK), datas, status, valor_total, métodos ACID
+  - **Enums**: QuartoTipo, StatusReserva, TipoCama, StatusDisponibilidade, RoleUsuario
+
+- **Tabelas e Campos Detalhados**:
+  - DDL completo para cada entidade
+  - Índices e constraints
+  - Foreign keys com ON DELETE rules
+  - Validações (UNIQUE, CHECK, DEFAULT)
+
+- **Métodos das Classes Principais**:
+  - `Hospede.validarCPF()`, `Hospede.criar()`, `Hospede.obterPorCPF()`
+  - `Quarto.validarNumeroUnico()`, `Quarto.obterDisponibilidade()`, `Quarto.calcularPreco()`
+  - `Reserva.criar()` (com ACID), `Reserva.detectarConflito()`, `Reserva.cancelar()`, `Reserva.marcarCheckIn/Out()`
+  - `Cama.criar()`, `Cama.obterTipo()`
+
+- **Diagramas de Sequência** (Mermaid):
+  - Fluxo: Criar Reserva (CU-005)
+    - Validação → Detecção conflito → Cálculo preço → INSERT com COMMIT
+  - Fluxo: Cancelar Reserva (CU-007)
+    - UPDATE reserva status + UPDATE quarto status LIVRE + COMMIT
+
+- **Diagrama ER (Entity Relationship)**:
+  - Hospede 1:M Reserva
+  - Quarto 1:M Cama
+  - Quarto 1:M Reserva
+  - Multiplicidades e cardinalidades
+
+- **Diagrama de Camadas Detalhado**:
+  - Cada camada listada com componentes específicos
+  - Fluxo de dados entre camadas
+  - Exemplos de endpoints GET/POST/PUT/DELETE
+  - Middleware na camada API
+
+- **Arquitetura de Load Balancer** (v1.1+):
+  - Distribuição de tráfego
+  - Múltiplas instâncias Node.js
+  - Compartilhamento de PostgreSQL
+  - Replicação master-slave
+
+- **Pipeline CI/CD**:
+  - GitHub Actions workflow
+  - Lint → Unit Tests → Build → Integration Tests → Docker
+  - Staging environment com smoke tests
+  - Production com blue-green deployment e auto-rollback
+
+**Propósito**: Proporcionar visão clara da arquitetura para desenvolvedores começarem implementação.
+
+---
+
 ## 📊 Indicadores de Qualidade
 
 ### Cobertura de Requisitos
@@ -447,6 +511,7 @@ Consulte [CASOS_USO_PRINCIPAIS.md](docs/REQUISITOS/CASOS_USO_PRINCIPAIS.md)
 | 1.4 | 2026-02-16 | Matriz de rastreabilidade requisitos↔US↔CU |
 | 1.5 | 2026-02-16 | Arquitetura proposta com roadmap evolutivo |
 | 1.6 | 2026-02-16 | Decisões arquiteturais críticas (ADR - 10 decisões) |
+| 1.7 | 2026-02-16 | Diagramas de componentes e classes (UML + Mermaid) |
 
 ---
 
@@ -457,5 +522,5 @@ Propriedade do projeto. Não distribuir sem permissão.
 ---
 
 **Última atualização**: 16 de fevereiro de 2026  
-**Status**: ✅ Documentação Completa com ADRs - Pronta para Sprint Planning  
+**Status**: ✅ Documentação Completa com Diagramas UML - Pronta para Sprint Planning  
 **Próximo passo**: Iniciar desenvolvimento com base em Sprint 1
