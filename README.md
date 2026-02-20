@@ -143,6 +143,47 @@ O sistema utiliza um **Monolito Modular** em 4 camadas, priorizando transações
 | **Latência de API** | Alvo: <200ms (p99) |
 | **Disponibilidade** | Alvo: ≥99.5% (SLA) |
 
+## ⚠️ Gestão de Riscos
+
+### Riscos Técnicos
+
+1. **Falha de Integração entre Módulos**
+   - *Mitigação:* Testes integrados automáticos a cada merge; revisão de contratos de interface.
+
+2. **Baixa Cobertura de Testes**
+   - *Mitigação:* Meta mínima de 70% de cobertura; PRs só aprovados com testes.
+
+3. **Performance Insuficiente da API**
+   - *Mitigação:* Monitoramento de latência; uso de cache (Redis) e profiling em endpoints críticos.
+
+4. **Dependência de Bibliotecas Externas**
+   - *Mitigação:* Documentar versões; plano de fallback para libs críticas; atualização regular.
+
+5. **Problemas de Conexão com Banco de Dados**
+   - *Mitigação:* Pool de conexões, retry automático, alertas de indisponibilidade.
+
+6. **Erros de Deploy/CI**
+   - *Mitigação:* Pipeline CI/CD com rollback automático; ambiente de staging obrigatório.
+
+---
+
+### Riscos Gerenciais
+
+1. **Atraso no Cronograma**
+   - *Mitigação:* Sprints curtas (2 semanas), daily standup, replanejamento rápido.
+
+2. **Turnover de Equipe**
+   - *Mitigação:* Documentação clara, onboarding ágil, code reviews colaborativos.
+
+3. **Mudança de Escopo**
+   - *Mitigação:* Controle de mudanças via backlog; aprovações do PO antes de alterar requisitos.
+
+4. **Falta de Engajamento do Cliente**
+   - *Mitigação:* Demos a cada sprint, reuniões semanais, feedback contínuo.
+
+5. **Falta de Visibilidade do Progresso**
+   - *Mitigação:* Dashboards de burn-down, reuniões de review, métricas públicas.
+
 ---
 
 ## 📝 Histórico de Versões
